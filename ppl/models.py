@@ -12,3 +12,4 @@ class Producto(models.Model):
     descripcion = models.CharField(max_length=255,null=True)
     precio = models.DecimalField(max_digits=12,decimal_places=2)
     imagen_ref = models.ImageField(upload_to='product_images',null=True)
+

@@ -2,3 +2,4 @@
 .env
 .session.vim
 db.sqlite3
+.venv
