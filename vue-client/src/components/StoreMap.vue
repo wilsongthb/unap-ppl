@@ -32,6 +32,7 @@ export default {
   // watch: {},
 
   mounted() {
+    this.$options.markers = new Array();
     // https://www.google.com/maps?ll=-15.322977,-70.028362&z=8&t=m&hl=es-ES&gl=US&mapclient=apiv3
     const uluru = { lat: -15.206391, lng: -69.995404 };
     const map = new window.google.maps.Map(this.$refs.elMap, {
@@ -43,24 +44,25 @@ export default {
       const marker = new window.google.maps.Marker({
         position: {
           lat: x.lat,
-          lng: x.lng,
-          label: x.name,
-          title: x.name,
-          clickable: true
+          lng: x.lng
         },
-        map
+        map,
+        label: "A",
+        title: x.name,
+        clickable: true,
+        icon: x.iconSrc
       });
       marker.addListener("click", (e) => {
         this.markClick(e, x.id);
       });
-      x.marker = marker;
+      this.$options.markers.push(marker);
       this.markers.set(x.id.toString(), x);
     });
   },
 
   methods: {
     markClick(event, id) {
-      console.log(event, id);
+      this.$emit("clickMarker", id);
     }
     //
     //

@@ -16,7 +16,14 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue")
   },
-  { path: "/store", component: () => import("../pages/StorePage.vue") }
+  { path: "/store", component: () => import("../pages/StorePage.vue") },
+  { path: "/profile", component: () => import("../pages/ProfilePage.vue") },
+  {
+    path: "/marker-view/:id",
+    name: "marker-view",
+    component: () => import("../pages/MarkerViewPage.vue"),
+    props: true
+  }
 ];
 
 const router = createRouter({

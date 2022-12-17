@@ -4,8 +4,11 @@
 <!-- Description: -->
 <template>
   <div class="row">
-    <StoreMap ref="elMap"></StoreMap>
-    <div class="col"><i class="fa-solid fa-store"></i> Store Page</div>
+    <div class="col">
+      <StoreMap
+        ref="elMap"
+        @clickMarker="clickMarkerHandler($event)"></StoreMap>
+    </div>
   </div>
 </template>
 <script>
@@ -38,7 +41,9 @@ export default {
   },
 
   methods: {
-    //
+    clickMarkerHandler(e) {
+      this.$router.push({ name: "marker-view", params: { id: e } });
+    }
     //
     //
   }
