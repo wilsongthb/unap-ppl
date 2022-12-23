@@ -16,7 +16,8 @@
       Perfil
     </router-link>
     <router-link class="btn btn-primary" to="/store">
-      <i class="fa-solid fa-store"></i> Marketplace
+      <i class="fa-solid fa-store"></i>
+      Marketplace
     </router-link>
     <router-link class="btn btn-primary" to="/about">
       <i class="fa-solid fa-question"></i>

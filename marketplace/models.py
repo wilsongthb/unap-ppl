@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
+from basics.models import File
 
 def user_directory_path(instance, filename):
     return 'products/user_{0}'.format(instance.user.id)
@@ -55,3 +56,13 @@ class Producto(AbstractProducto):
     #  imp_aux1 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
     #  imp_aux2 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
 
+"""
+Marcadores de maps
+"""
+class MapMark(models.Model):
+    label = models.CharField(max_length=150)
+    title = models.CharField(max_length=255)
+    icon_file = models.ForeignKey(File,on_delete=models.PROTECT,null=True,blank=True)
+    lat = models.DecimalField(max_digits=18,decimal_places=10)
+    lng = models.DecimalField(max_digits=18,decimal_places=10)
+    type = models.CharField(max_length=15) # place, product, 

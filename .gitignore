@@ -3,3 +3,5 @@
 .session.vim
 db.sqlite3
 .venv
+
+*.swp

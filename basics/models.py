@@ -9,4 +9,4 @@ class File(models.Model):
     name = models.CharField(max_length=150)
     size = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='files')
-
+    mimetype = models.ForeignKey('Mimetype',on_delete=models.PROTECT)
