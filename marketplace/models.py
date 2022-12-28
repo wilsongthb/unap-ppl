@@ -56,6 +56,7 @@ class Producto(AbstractProducto):
     #  imp_aux1 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
     #  imp_aux2 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
 
+
 """
 Marcadores de maps
 """
@@ -65,4 +66,8 @@ class MapMark(models.Model):
     icon_file = models.ForeignKey(File,on_delete=models.PROTECT,null=True,blank=True)
     lat = models.DecimalField(max_digits=18,decimal_places=10)
     lng = models.DecimalField(max_digits=18,decimal_places=10)
-    type = models.CharField(max_length=15) # place, product, 
+    type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador
+    #  category = models.ForeignKey('Categoria', on_delete=models.PROTECT)
+    category = models.ForeignKey()
+
+    
