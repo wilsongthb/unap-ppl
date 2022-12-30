@@ -32,7 +32,10 @@ Producto base, este producto no se puede registrar en ventas,
 es una entidad para crear productos nuevos para los usuarios publicadores
 """
 class BaseProducto(AbstractProducto):
-    pass
+    precio_avg = models.DecimalField(
+            max_digits=12,
+            decimal_places=2,
+            null=True)
 
 class Producto(AbstractProducto):
     base_producto = models.ForeignKey(
@@ -47,11 +50,12 @@ class Producto(AbstractProducto):
             decimal_places=2,
             null=True)
     cantidad = models.DecimalField(max_digits=12,decimal_places=2,null=True)
-    ubicacion_label = models.CharField(max_length=80)
-    ubicacion_cod = models.CharField(max_length=10)
+    # ubicacion_label = models.CharField(max_length=80)
+    # ubicacion_cod = models.CharField(max_length=10)
+    map_mark = models.ForeignKey('MapMark', on_delete=models.PROTECT)
     # -25.5342757,-44.1151938
-    latitud = models.DecimalField(max_digits=15,decimal_places=9,null=True)
-    longitud = models.DecimalField(max_digits=15,decimal_places=9,null=True)
+    #  latitud = models.DecimalField(max_digits=15,decimal_places=9,null=True)
+    #  longitud = models.DecimalField(max_digits=15,decimal_places=9,null=True)
     # Auxiliares
     #  imp_aux1 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
     #  imp_aux2 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
@@ -66,8 +70,5 @@ class MapMark(models.Model):
     icon_file = models.ForeignKey(File,on_delete=models.PROTECT,null=True,blank=True)
     lat = models.DecimalField(max_digits=18,decimal_places=10)
     lng = models.DecimalField(max_digits=18,decimal_places=10)
-    type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador
-    #  category = models.ForeignKey('Categoria', on_delete=models.PROTECT)
-    category = models.ForeignKey()
-
-    
+    type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador, IN: Institucion
+    pk = models.PositiveBigInteger(null=True)

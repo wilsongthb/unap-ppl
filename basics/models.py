@@ -10,3 +10,5 @@ class File(models.Model):
     size = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='files')
     mimetype = models.ForeignKey('Mimetype',on_delete=models.PROTECT)
+    # def __str__(self):
+    #     return self.file

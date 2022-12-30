@@ -50,16 +50,20 @@ router = routers.DefaultRouter()
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
 from rest_framework.response import Response
-
+from basics.api_urls import urls as basics_urls
+from marketplace.api_urls import urls as marketplace_urls
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def protected_view(request):
     return Response({"message": "hola esto es un saludo protegido"})
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
+    # path('api/', include(BasicsRouter.urls)),
+    path('api/', include([
+        path('basics/', include(basics_urls)),
+        path('marketplace/', include(marketplace_urls)),
+    ])),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
