@@ -6,3 +6,4 @@ services:
     volumes:
       - ./:/code
     command: python /code/manage.py runserver 0.0.0.0:3000
+    working_dir: /code
