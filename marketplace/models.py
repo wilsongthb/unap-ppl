@@ -71,4 +71,4 @@ class MapMark(models.Model):
     lat = models.DecimalField(max_digits=18,decimal_places=10)
     lng = models.DecimalField(max_digits=18,decimal_places=10)
     type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador, IN: Institucion
-    pk = models.PositiveBigInteger(null=True)
+    instance_id = models.PositiveBigIntegerField(null=True)
