@@ -1,3 +1,5 @@
 - Agregar autenticacion jwt en el coresite ✅
 - integrar autenticacion jwt en vue client
 - Agregar seeders para tablas de marcadores de productos
+-
+-

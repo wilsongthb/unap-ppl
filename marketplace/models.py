@@ -1,74 +1,79 @@
 from django.db import models
 from django.contrib.auth.models import User
+from basics.models import AbsModelTimestamps
 # Create your models here.
-from basics.models import File
 
-def user_directory_path(instance, filename):
-    return 'products/user_{0}'.format(instance.user.id)
+class Persona(models.Model):
+    """
+    Tabla de datos personales de usuarios
+    """
+    tipo = models.CharField(max_length=1) # F: Fisica, J: Juridica
+    nombre_completo = models.CharField(max_length=255)
+    ap_paterno = models.CharField(max_length=50, null=True)
+    ap_materno = models.CharField(max_length=50, null=True)
+    nombres = models.CharField(max_length=200)
+    razon_social = models.CharField(max_length=255, null=True)
+    dni = models.CharField(max_length=8, null=True)
+    ruc = models.CharField(max_length=12, null=True)
+    ubicacion = models.CharField(max_length=6) # departamento char(2), provincia char(2), distrito char(2)
+    direccion = models.CharField(max_length=150, null=True)
+    lat_ubi = models.DecimalField(max_digits=18,decimal_places=10, null=True, 
+            help_text="Latitud de ubicacion por defecto")
+    lng_ubi = models.DecimalField(max_digits=18,decimal_places=10, null=True,
+            help_text="Longitud de ubicacion por defecto")
+    telefono1 = models.CharField(max_length=30) # celular principal
+    telefono2 = models.CharField(max_length=30, null=True) # numero de celular secundario
+    foto_perfil = models.ImageField(upload_to='personas/foto_perfil', 
+            null=True, blank=True)
+    user_id  = models.PositiveBigIntegerField(unique=True, null=True)
+    visible = models.BooleanField(default=True) # visible 
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
-    imagen_ref = models.ImageField(upload_to='categories/images',null=True,blank=True)
-    icon_ref = models.ImageField(upload_to='categories/icons',null=True,blank=True)
+    imagen_ref = models.ImageField(
+            upload_to='categorias/images',
+            null=True,blank=True)
+    icon_ref = models.ImageField(
+            upload_to='categorias/icons',
+            null=True,blank=True)
+    visible=models.BooleanField(default=True)
     def __str__(self):
         return str(self.id) + '-' + self.nombre
 
-class AbstractProducto(models.Model):
-    class Meta:
-        abstract=True
+class Producto(AbsModelTimestamps):
+    """
+    Productos de los usuarios
+    """
     titulo = models.CharField(max_length=50)
     categoria = models.ForeignKey(
             'Categoria',
             on_delete=models.PROTECT)
     imagen_ref = models.ImageField(
-            upload_to=user_directory_path,
-            null=True,
-            blank=True)
+            upload_to='productos/images',
+            null=True,blank=True)
     creador = models.ForeignKey(User,on_delete=models.PROTECT)
-    #  unidad_medida = models.CharField(max_length=50)
-
-"""
-Producto base, este producto no se puede registrar en ventas,
-es una entidad para crear productos nuevos para los usuarios publicadores
-"""
-class BaseProducto(AbstractProducto):
-    precio_avg = models.DecimalField(
-            max_digits=12,
-            decimal_places=2,
-            null=True)
-
-class Producto(AbstractProducto):
-    base_producto = models.ForeignKey(
-            'BaseProducto',
-            on_delete=models.PROTECT,
-            null=True)
+    es_base = models.BooleanField(default=False) # Define si se pueden crear nuevos productos a partir de este de forma publica
+    base_id = models.PositiveBigIntegerField(null=True) # id de producto del producto base
     codigo = models.CharField(max_length=30,null=True,blank=True)
     descripcion = models.CharField(max_length=255,null=True)
     precio = models.DecimalField(max_digits=12,decimal_places=2)
-    precio_ori = models.DecimalField(
-            max_digits=12,
-            decimal_places=2,
-            null=True)
     cantidad = models.DecimalField(max_digits=12,decimal_places=2,null=True)
-    # ubicacion_label = models.CharField(max_length=80)
-    # ubicacion_cod = models.CharField(max_length=10)
     map_mark = models.ForeignKey('MapMark', on_delete=models.PROTECT)
-    # -25.5342757,-44.1151938
-    #  latitud = models.DecimalField(max_digits=15,decimal_places=9,null=True)
-    #  longitud = models.DecimalField(max_digits=15,decimal_places=9,null=True)
-    # Auxiliares
-    #  imp_aux1 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
-    #  imp_aux2 = models.DecimalField(max_digits=12,decimal_places=2,null=True)
+    visible = models.BooleanField(default=True) # visible en internet
 
 
-"""
-Marcadores de maps
-"""
+
 class MapMark(models.Model):
+    """
+    Marcadores de mapas
+    """
     label = models.CharField(max_length=150)
     title = models.CharField(max_length=255)
-    icon_file = models.ForeignKey(File,on_delete=models.PROTECT,null=True,blank=True)
+    icon_file = models.ImageField(upload_to='map_markers/icons', null=True, blank=True)
     lat = models.DecimalField(max_digits=18,decimal_places=10)
     lng = models.DecimalField(max_digits=18,decimal_places=10)
+    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)
     type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador, IN: Institucion
     instance_id = models.PositiveBigIntegerField(null=True)
+    visible = models.BooleanField(default=True)
+

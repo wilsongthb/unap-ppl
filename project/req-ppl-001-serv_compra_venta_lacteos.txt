@@ -1,0 +1,18 @@
+- Crear tabla extension de comprador
+  - Registrar
+
+- Crear una tabla para registrar los saldos de lacteos comercializados
+  - Registrar los saldos totales de leche que tiene un comprador/acopiador por cada uno de sus proveedores
+  - columnas:
+      - materia prima: LECHE_SIN_PROCESAR
+      - Identificador de comprador
+      - Identificador de proveedor, vendedor no publico
+      - Cantidad de leche en litros, valor positivo es cantidad a favor del comercializador, valor negativo es a favor del proveedor
+      - Precio de venta, valor, decimal(18,2), sirve para estimar valor de la leche
+      - Periodo de pago, char(1), Q-quincena, M-mensual, D-diario
+      - fecha ultimo acopio
+      - fecha ultimo pago
+      - fecha de proximo pago
+
+- Crear una tabla para registrar las operaciones de compra venta de leche
+  - columnas

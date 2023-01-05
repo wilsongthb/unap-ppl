@@ -5,3 +5,4 @@ from marketplace import models
 admin.site.register(models.Producto)
 admin.site.register(models.Categoria)
 admin.site.register(models.BaseProducto)
+admin.site.register(models.MapMark)
