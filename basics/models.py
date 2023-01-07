@@ -23,10 +23,12 @@ class AbsModelTimestamps(models.Model):
 
 
 class ParametroProceso(models.Model):
-    secuencia_1=models.PositiveIntegerField(primary_key=True)
-    secuencia_2=models.PositiveIntegerField(primary_key=True)
-    secuencia_3=models.PositiveIntegerField(primary_key=True)
-    descripcion=models.CharField(max_length=60, blank=True)
-    importe_1=models.FloatField(max_digits=18, blank=True)
-    importe_2=models.FloatField(max_digits=18, blank=True)
-    importe_3=models.FloatField(max_digits=18, blank=True)
+    entero1=models.PositiveIntegerField(default=0)
+    entero2=models.PositiveIntegerField(default=0)
+    entero3=models.PositiveIntegerField(default=0)
+    texto1=models.CharField(max_length=100, blank=True, null=True)
+    texto2=models.CharField(max_length=100, blank=True, null=True)
+    texto3=models.CharField(max_length=100, blank=True, null=True)
+    importe1=models.FloatField(blank=True)
+    importe2=models.FloatField(blank=True)
+    importe3=models.FloatField(blank=True)

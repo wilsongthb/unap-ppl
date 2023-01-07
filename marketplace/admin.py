@@ -4,5 +4,4 @@ from marketplace import models
 # Register your models here.
 admin.site.register(models.Producto)
 admin.site.register(models.Categoria)
-admin.site.register(models.BaseProducto)
 admin.site.register(models.MapMark)

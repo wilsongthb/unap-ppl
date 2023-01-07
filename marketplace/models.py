@@ -76,4 +76,3 @@ class MapMark(models.Model):
     type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador, IN: Institucion
     instance_id = models.PositiveBigIntegerField(null=True)
     visible = models.BooleanField(default=True)
-
