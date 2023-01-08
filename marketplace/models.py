@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from basics.models import AbsModelTimestamps
 # Create your models here.
 
+
 class Persona(models.Model):
     """
     Tabla de datos personales de usuarios
@@ -12,6 +13,9 @@ class Persona(models.Model):
     ap_paterno = models.CharField(max_length=50, null=True)
     ap_materno = models.CharField(max_length=50, null=True)
     nombres = models.CharField(max_length=200)
+    sexo = models.CharField(max_length=1, 
+            help_text='F: Femenino, M: Masculino, N: Ninguno', default='N')
+    fecha_nacimiento = models.DateField(null=True)
     razon_social = models.CharField(max_length=255, null=True)
     dni = models.CharField(max_length=8, null=True)
     ruc = models.CharField(max_length=12, null=True)
@@ -23,6 +27,7 @@ class Persona(models.Model):
             help_text="Longitud de ubicacion por defecto")
     telefono1 = models.CharField(max_length=30) # celular principal
     telefono2 = models.CharField(max_length=30, null=True) # numero de celular secundario
+    email = models.CharField(max_length=255, null=True)
     foto_perfil = models.ImageField(upload_to='personas/foto_perfil', 
             null=True, blank=True)
     user_id  = models.PositiveBigIntegerField(unique=True, null=True)
@@ -40,6 +45,13 @@ class Categoria(models.Model):
     def __str__(self):
         return str(self.id) + '-' + self.nombre
 
+class MateriaPrima(models.Model):
+    nombre = models.CharField(max_length=200, primary_key=True)
+    simbolo = models.CharField(max_length=10, unique=True)
+    def __str__(self):
+        return self.nombre
+
+
 class Producto(AbsModelTimestamps):
     """
     Productos de los usuarios
@@ -53,6 +65,7 @@ class Producto(AbsModelTimestamps):
             null=True,blank=True)
     creador = models.ForeignKey(User,on_delete=models.PROTECT)
     es_base = models.BooleanField(default=False) # Define si se pueden crear nuevos productos a partir de este de forma publica
+    es_materia_prima = models.BooleanField(default=False)
     base_id = models.PositiveBigIntegerField(null=True) # id de producto del producto base
     codigo = models.CharField(max_length=30,null=True,blank=True)
     descripcion = models.CharField(max_length=255,null=True)
