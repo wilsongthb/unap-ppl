@@ -8,7 +8,15 @@ class Persona(models.Model):
     """
     Tabla de datos personales de usuarios
     """
+    class Meta:
+        indexes=[
+            models.Index(fields=['tipo', 'dni', 'ruc']),
+            models.Index(fields=['nombres', 'ap_paterno', 'ap_materno', 'razon_social']),
+            models.Index(fields=['ndep', 'nprov', 'ndist']),
+        ]
     tipo = models.CharField(max_length=1) # F: Fisica, J: Juridica
+    dni = models.CharField(max_length=8, null=True)
+    ruc = models.CharField(max_length=11, null=True)
     nombre_completo = models.CharField(max_length=255)
     ap_paterno = models.CharField(max_length=50, null=True)
     ap_materno = models.CharField(max_length=50, null=True)
@@ -17,14 +25,15 @@ class Persona(models.Model):
             help_text='F: Femenino, M: Masculino, N: Ninguno', default='N')
     fecha_nacimiento = models.DateField(null=True)
     razon_social = models.CharField(max_length=255, null=True)
-    dni = models.CharField(max_length=8, null=True)
-    ruc = models.CharField(max_length=12, null=True)
-    ubicacion = models.CharField(max_length=6) # departamento char(2), provincia char(2), distrito char(2)
+    ndep = models.CharField(max_length=2, null=True, help_text="Codigo departamento")
+    nprov = models.CharField(max_length=2, null=True, help_text="Codigo Provincia")
+    ndist = models.CharField(max_length=2, null=True, help_text="Codigo Distrito")
+        # departamento char(2), provincia char(2), distrito char(2)
     direccion = models.CharField(max_length=150, null=True)
     lat_ubi = models.DecimalField(max_digits=18,decimal_places=10, null=True, 
-            help_text="Latitud de ubicacion por defecto")
+            help_text="Latitud de ubicacion")
     lng_ubi = models.DecimalField(max_digits=18,decimal_places=10, null=True,
-            help_text="Longitud de ubicacion por defecto")
+            help_text="Longitud de ubicacion")
     telefono1 = models.CharField(max_length=30) # celular principal
     telefono2 = models.CharField(max_length=30, null=True) # numero de celular secundario
     email = models.CharField(max_length=255, null=True)
@@ -45,35 +54,17 @@ class Categoria(models.Model):
     def __str__(self):
         return str(self.id) + '-' + self.nombre
 
-class MateriaPrima(models.Model):
-    nombre = models.CharField(max_length=200, primary_key=True)
-    simbolo = models.CharField(max_length=10, unique=True)
+#  class MateriaPrima(models.Model):
+#      nombre = models.CharField(max_length=200, primary_key=True)
+#      simbolo = models.CharField(max_length=10, unique=True)
+#      def __str__(self):
+#          return self.nombre
+
+class UnidadMedida(models.Model):
+    nombre = models.CharField(max_length=30, primary_key=True)
+    simbolo = models.CharField(max_length=5, unique=True)
     def __str__(self):
         return self.nombre
-
-
-class Producto(AbsModelTimestamps):
-    """
-    Productos de los usuarios
-    """
-    titulo = models.CharField(max_length=50)
-    categoria = models.ForeignKey(
-            'Categoria',
-            on_delete=models.PROTECT)
-    imagen_ref = models.ImageField(
-            upload_to='productos/images',
-            null=True,blank=True)
-    creador = models.ForeignKey(User,on_delete=models.PROTECT)
-    es_base = models.BooleanField(default=False) # Define si se pueden crear nuevos productos a partir de este de forma publica
-    es_materia_prima = models.BooleanField(default=False)
-    base_id = models.PositiveBigIntegerField(null=True) # id de producto del producto base
-    codigo = models.CharField(max_length=30,null=True,blank=True)
-    descripcion = models.CharField(max_length=255,null=True)
-    precio = models.DecimalField(max_digits=12,decimal_places=2)
-    cantidad = models.DecimalField(max_digits=12,decimal_places=2,null=True)
-    map_mark = models.ForeignKey('MapMark', on_delete=models.PROTECT)
-    visible = models.BooleanField(default=True) # visible en internet
-
 
 
 class MapMark(models.Model):
@@ -89,3 +80,27 @@ class MapMark(models.Model):
     type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador, IN: Institucion
     instance_id = models.PositiveBigIntegerField(null=True)
     visible = models.BooleanField(default=True)
+
+
+class Producto(AbsModelTimestamps):
+    """
+    Productos de los usuarios
+    """
+    titulo = models.CharField(max_length=50)
+    categoria = models.ForeignKey(
+            'Categoria',
+            on_delete=models.PROTECT)
+    imagen_ref = models.ImageField(
+            upload_to='productos/images',
+            null=True,blank=True)
+    es_base = models.BooleanField(default=False) # Define si se pueden crear nuevos productos a partir de este de forma publica
+    base_id = models.PositiveBigIntegerField(null=True) # id de producto del producto base
+    es_materia_prima = models.BooleanField(default=False)
+    unidad_medida = models.ForeignKey(UnidadMedida, on_delete=models.PROTECT)
+    codigo = models.CharField(max_length=30,null=True,blank=True)
+    descripcion = models.CharField(max_length=255,null=True)
+    precio = models.DecimalField(max_digits=12,decimal_places=2)
+    cantidad = models.DecimalField(max_digits=12,decimal_places=2,null=True)
+    map_mark = models.ForeignKey('MapMark', on_delete=models.PROTECT, null=True)
+    visible = models.BooleanField(default=True) # visible en internet
+
