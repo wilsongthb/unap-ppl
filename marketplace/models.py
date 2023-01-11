@@ -41,6 +41,14 @@ class Persona(models.Model):
             null=True, blank=True)
     user_id  = models.PositiveBigIntegerField(unique=True, null=True)
     visible = models.BooleanField(default=True) # visible 
+    def __str__(self):
+        if self.tipo == 'J' and self.razon_social is not None:
+            return self.razon_social
+        elif self.tipo == 'F':
+            return f"{self.nombres} {self.ap_paterno} {self.ap_materno}"
+        else:
+            return f"{self.id} {self.nombre_completo}"
+        
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
@@ -54,17 +62,13 @@ class Categoria(models.Model):
     def __str__(self):
         return str(self.id) + '-' + self.nombre
 
-#  class MateriaPrima(models.Model):
-#      nombre = models.CharField(max_length=200, primary_key=True)
-#      simbolo = models.CharField(max_length=10, unique=True)
-#      def __str__(self):
-#          return self.nombre
-
 class UnidadMedida(models.Model):
-    nombre = models.CharField(max_length=30, primary_key=True)
-    simbolo = models.CharField(max_length=5, unique=True)
+    nombre = models.CharField(max_length=25)
+    simbolo = models.CharField(max_length=5, null=True)
     def __str__(self):
         return self.nombre
+    class Meta:
+        unique_together = ['nombre', 'simbolo']
 
 
 class MapMark(models.Model):
@@ -76,7 +80,6 @@ class MapMark(models.Model):
     icon_file = models.ImageField(upload_to='map_markers/icons', null=True, blank=True)
     lat = models.DecimalField(max_digits=18,decimal_places=10)
     lng = models.DecimalField(max_digits=18,decimal_places=10)
-    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)
     type = models.CharField(max_length=2) # PR: producto, CO: comprador/acopiador, IN: Institucion
     instance_id = models.PositiveBigIntegerField(null=True)
     visible = models.BooleanField(default=True)
@@ -86,10 +89,7 @@ class Producto(AbsModelTimestamps):
     """
     Productos de los usuarios
     """
-    titulo = models.CharField(max_length=50)
-    categoria = models.ForeignKey(
-            'Categoria',
-            on_delete=models.PROTECT)
+    nombre = models.CharField(max_length=50)
     imagen_ref = models.ImageField(
             upload_to='productos/images',
             null=True,blank=True)
@@ -99,8 +99,34 @@ class Producto(AbsModelTimestamps):
     unidad_medida = models.ForeignKey(UnidadMedida, on_delete=models.PROTECT)
     codigo = models.CharField(max_length=30,null=True,blank=True)
     descripcion = models.CharField(max_length=255,null=True)
-    precio = models.DecimalField(max_digits=12,decimal_places=2)
-    cantidad = models.DecimalField(max_digits=12,decimal_places=2,null=True)
-    map_mark = models.ForeignKey('MapMark', on_delete=models.PROTECT, null=True)
-    visible = models.BooleanField(default=True) # visible en internet
+    precio = models.DecimalField(max_digits=12,decimal_places=2) # se sobre entiende precio unitario
+    visible = models.BooleanField(default=True)
+    def __str__(self):
+        return f"{self.nombre} x {self.unidad_medida}"
 
+
+
+class Publicacion(AbsModelTimestamps):
+    creador = models.ForeignKey(User, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    map_mark = models.ForeignKey(MapMark, on_delete=models.PROTECT)
+    precio_original = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    precio = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    mostrar_pre_org = models.BooleanField(default=True, 
+        help_text="Mostrar precio original")
+    cantidad = models.DecimalField(max_digits=14, decimal_places=2, default=1, 
+        help_text="Cantidad disponible")
+
+
+class Lugar(models.Model):
+    ndep = models.CharField(max_length=2)
+    nprov = models.CharField(max_length=2, default='00')
+    ndist = models.CharField(max_length=2, default='00')
+    nlugar = models.CharField(max_length=2, default='00')
+    tipo = models.CharField(max_length=2) # DE: Departamento, PR: Provincia, DI: Distrito, CO: Comunidad, BA: Barrio
+    nombre = models.CharField(max_length=150)
+    class Meta:
+        unique_together = ['ndep', 'nprov', 'ndist', 'nlugar', 'tipo']
+        indexes = [
+                models.Index(fields=['ndep', 'nprov', 'ndist', 'nlugar', 'tipo'])
+                ]

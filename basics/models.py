@@ -10,6 +10,7 @@ class File(models.Model):
     size = models.PositiveIntegerField(default=0)
     file = models.FileField(upload_to='files')
     mimetype = models.ForeignKey('Mimetype',on_delete=models.PROTECT)
+    #  creator
 
 class AbsModelTimestamps(models.Model):
     """
@@ -32,3 +33,6 @@ class ParametroProceso(models.Model):
     importe1=models.FloatField(blank=True)
     importe2=models.FloatField(blank=True)
     importe3=models.FloatField(blank=True)
+    check1=models.BooleanField(blank=True)
+    check2=models.BooleanField(blank=True)
+    check3=models.BooleanField(blank=True)

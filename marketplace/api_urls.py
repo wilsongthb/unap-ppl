@@ -1,5 +1,5 @@
 from rest_framework import viewsets, serializers, routers
-from marketplace import models
+from marketplace import models, views
 
 class MapMarkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,8 @@ class MapMarkViewSet(viewsets.ModelViewSet):
     queryset = models.MapMark.objects.all()
 
 routes = routers.DefaultRouter()
-routes.register(r'map-mark',MapMarkViewSet)
+routes.register(r'mapmark',MapMarkViewSet)
+routes.register(r'persona',views.PersonaViewSet)
 urls = [
     # 
 ] + routes.urls
