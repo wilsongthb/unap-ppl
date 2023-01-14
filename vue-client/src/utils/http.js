@@ -10,9 +10,8 @@ var sessionToken = Cookies.get("token");
 // var refreshToken = Cookies.get('refreshToken');
 
 const http = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: process.env.VUE_APP_APIREST_URL,
   headers: {
-    "Access-Control-Allow-Origin": "*",
     Authorization: sessionToken
   }
 });
