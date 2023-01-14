@@ -6,6 +6,8 @@
   "bracketSameLine": true,
   "jsxBracketSameLine": true,
   "tabWidth": 2,
-  "useTabs": false
+  "useTabs": false,
+  "endOfLine": "auto"
+
 }
 
