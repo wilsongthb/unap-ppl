@@ -17,6 +17,7 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue")
   },
   { path: "/store", component: () => import("../pages/StorePage.vue") },
+  { path: "/login", component: () => import("../pages/LoginPage.vue") },
   { path: "/profile", component: () => import("../pages/ProfilePage.vue") },
   {
     path: "/marker-view/:id",
