@@ -10,5 +10,5 @@ pillow==9.3.0
 pyjwt==2.6.0 ; python_version >= '3.7'
 pytz==2022.7
 sqlparse==0.4.3 ; python_version >= '3.5'
-openpyxl=='3.0.10'
-django-cors-headers=='3.13.0'
+openpyxl==3.0.10
+django-cors-headers==3.13.0
