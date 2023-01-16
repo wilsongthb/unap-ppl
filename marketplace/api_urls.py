@@ -9,6 +9,7 @@ class MapMarkSerializer(serializers.ModelSerializer):
 class MapMarkViewSet(viewsets.ModelViewSet):
     serializer_class = MapMarkSerializer
     queryset = models.MapMark.objects.all()
+    search_fields = ['label']
 
 routes = routers.DefaultRouter()
 routes.register(r'mapmark',MapMarkViewSet)
