@@ -63,7 +63,7 @@ class Categoria(models.Model):
         return str(self.id) + '-' + self.nombre
 
 class UnidadMedida(models.Model):
-    nombre = models.CharField(max_length=25)
+    nombre = models.CharField(max_length=20)
     simbolo = models.CharField(max_length=5, null=True)
     def __str__(self):
         return self.nombre
@@ -105,7 +105,6 @@ class Producto(AbsModelTimestamps):
     visible = models.BooleanField(default=True)
     def __str__(self):
         return f"{self.nombre} x {self.unidad_medida}"
-
 
 
 class Publicacion(AbsModelTimestamps):

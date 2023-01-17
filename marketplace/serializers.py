@@ -18,19 +18,11 @@ class ProductoSerializer(serializers.ModelSerializer):
         model = models.Producto
         fields = '__all__'
 
-def get_inst():
-    return 'Faaa'
 
 class PublicacionSerializer(serializers.ModelSerializer):
-    def get_producto_nombre(self):
-        return 'claro como no'
-
-    producto_nombre = serializers.CharField(
-            read_only=True, 
-            source = 'producto.nombre'
-            #  source = 'get_producto_nombre'
-            )
-
+    producto_obj = serializers.SerializerMethodField(read_only=True)
+    def get_producto_obj(self, obj):
+        return ProductoSerializer(obj.producto).data
     class Meta:
         model = models.Publicacion
         fields = '__all__'

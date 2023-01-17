@@ -19,6 +19,7 @@ class ProductoViewSet(viewsets.ModelViewSet):
     queryset = models.Producto.objects.all()
     serializer_class = serializers.ProductoSerializer
     search_fields = ['nombre']
+    filterset_fields = ['es_base', 'es_materia_prima']
 
 
 class PublicacionViewSet(viewsets.ModelViewSet):
