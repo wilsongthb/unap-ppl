@@ -107,6 +107,9 @@ class Producto(AbsModelTimestamps):
     descripcion = models.CharField(max_length=255,null=True)
     precio = models.DecimalField(max_digits=12,decimal_places=2) # se sobre entiende precio unitario
     visible = models.BooleanField(default=True)
+    creador = models.ForeignKey(User, on_delete=models.PROTECT, 
+                                null=True, blank=True, 
+                                related_name='+')
     def __str__(self):
         return f"{self.nombre} x {self.unidad_medida}"
 
