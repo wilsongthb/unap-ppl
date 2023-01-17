@@ -20,7 +20,7 @@ class AbsModelTimestamps(models.Model):
         abstract=True
     created_at = models.DateTimeField(auto_now_add=True) # Agregar evento create para guardar automaticamente
     updated_at = models.DateTimeField(auto_now=True) # Agregar evento create para guardar automaticamente
-    deleted_at = models.DateTimeField(null=True) # Agregar evento create para guardar automaticamente
+    deleted_at = models.DateTimeField(null=True, blank=True) # Agregar evento create para guardar automaticamente
 
 
 class ParametroProceso(models.Model):

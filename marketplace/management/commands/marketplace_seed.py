@@ -33,7 +33,7 @@ def seed_productos():
         spamreader = csv.reader(csvfile, delimiter=',',quotechar='"')
         i = 1
         unidad_med = models.UnidadMedida.objects.create(
-                nombre = 'KILO',
+                nombre = 'KILOS',
                 simbolo = 'Kg'
                 )
         for row in spamreader:
