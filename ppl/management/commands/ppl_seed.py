@@ -33,7 +33,6 @@ def seed_excel_plantas():
     """
     Leer la hoja Georeferencia y guardar datos en db
     """
-    print("claro como no:" + str(sheet['R21'].value))
     c_row = 21
     while c_row <= 37:
         print(str(sheet['B'+str(c_row)].value))
@@ -68,6 +67,9 @@ def seed_excel_plantas():
                 marca_registrada = True if  sheet['G'+str(c_row)].value == 'Si' else False,
                 map_mark=map_mark,
                 )
+        if c_row == 21:
+            planta.user_id = 1
+            planta.save()
         map_mark.instance_id = map_mark.id
         map_mark.save()
         c_row += 1

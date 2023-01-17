@@ -2,11 +2,15 @@ from django.db import models
 from marketplace.models import Persona, Producto, MapMark
 from basics.models import AbsModelTimestamps
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 # Create your models here.
 
 
 class Planta(models.Model):
-    persona = models.ForeignKey(Persona, on_delete=models.PROTECT) # planta requiere definir con una persona
+    user = models.OneToOneField(User, on_delete=models.PROTECT, 
+                             null=True, blank=True)
+    persona = models.ForeignKey(
+            Persona, on_delete=models.PROTECT) # planta requiere definir con una persona
     tipo = models.CharField(max_length=20, null=True) # es A,B o C
     reg_sanitario = models.BooleanField(default=False, 
             help_text="Registro Sanitario") # tiene o no
@@ -17,20 +21,26 @@ class Planta(models.Model):
 
 # integrante activo
 class PlantaIntegrante(models.Model):
+    planta = models.ForeignKey(Planta, on_delete=models.PROTECT)
     integrante = models.ForeignKey(Persona, on_delete=models.PROTECT)
     cargo = models.CharField(max_length=80)
+    es_titular = models.BooleanField(default=False)
+    class Meta:
+        unique_together = ['planta', 'integrante']
 
 
 class PlantaProveedor(models.Model):
     planta = models.ForeignKey(Planta, on_delete=models.PROTECT)
     proveedor = models.ForeignKey(Persona, on_delete=models.PROTECT, related_name='+')
     map_mark = models.ForeignKey(MapMark, on_delete=models.PROTECT, null=True)
+    class Meta:
+        unique_together = ['planta', 'proveedor']
 
 
 class PlantaMovimiento(AbsModelTimestamps):
     planta=models.ForeignKey(Planta, on_delete=models.PROTECT)
     socio=models.ForeignKey(Persona, on_delete=models.PROTECT, related_name='+')
-    tipo=models.CharField(max_length=1) # C=Compra, V=Venta
+    tipo=models.CharField(max_length=1) # I=Ingreso, E=Egreso
     producto=models.ForeignKey(Producto, on_delete=models.PROTECT, related_name='+')
     fecha=models.DateField(help_text="Fecha del movimiento")
     lote=models.PositiveSmallIntegerField(default=1)

@@ -7,9 +7,9 @@ from openpyxl import load_workbook
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        #  seed_map_markers()
         seed_lugares()
         seed_productos()
+        # seed_map_markers()
 
 
 def seed_map_markers():

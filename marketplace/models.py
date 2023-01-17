@@ -39,7 +39,8 @@ class Persona(models.Model):
     email = models.CharField(max_length=255, null=True)
     foto_perfil = models.ImageField(upload_to='personas/foto_perfil', 
             null=True, blank=True)
-    user_id  = models.PositiveBigIntegerField(unique=True, null=True)
+    user_id  = models.PositiveBigIntegerField(unique=True, null=True, blank=True,
+            help_text="Usuario vinculado a esta persona")
     visible = models.BooleanField(default=True) # visible 
     def __str__(self):
         if self.tipo == 'J' and self.razon_social is not None:
@@ -63,6 +64,9 @@ class Categoria(models.Model):
         return str(self.id) + '-' + self.nombre
 
 class UnidadMedida(models.Model):
+    """
+    Unidad de medida
+    """
     nombre = models.CharField(max_length=20)
     simbolo = models.CharField(max_length=5, null=True)
     def __str__(self):
@@ -108,18 +112,25 @@ class Producto(AbsModelTimestamps):
 
 
 class Publicacion(AbsModelTimestamps):
+    """
+    Publicaciones de venta de los usuarios
+    """
     creador = models.ForeignKey(User, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
     map_mark = models.ForeignKey(MapMark, on_delete=models.PROTECT)
     precio_original = models.DecimalField(max_digits=14, decimal_places=2, default=0)
     precio = models.DecimalField(max_digits=14, decimal_places=2, default=0)
-    mostrar_pre_org = models.BooleanField(default=True, 
+    mostrar_pre_org = models.BooleanField(default=False, 
         help_text="Mostrar precio original")
     cantidad = models.DecimalField(max_digits=14, decimal_places=2, default=1, 
         help_text="Cantidad disponible")
+    visible = models.BooleanField(default=True)
 
 
 class Lugar(models.Model):
+    """
+    Lugar: departamento, distrito, provincia, centro poblado, direccion, etc
+    """
     ndep = models.CharField(max_length=2)
     nprov = models.CharField(max_length=2, default='00')
     ndist = models.CharField(max_length=2, default='00')
