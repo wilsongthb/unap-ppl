@@ -1,12 +1,16 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 // import HomeView from "../views/HomeView.vue";
+import authGuard from "@/auth-module/index.js";
 import PublicContainer from "src/pages/PublicContainer.vue";
 import PublicIndex from "src/pages/PublicIndex.vue";
-
+import store from "@/store";
 const routes = [
   {
     path: "/",
     component: PublicContainer,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       { path: "", component: PublicIndex },
       {
@@ -30,7 +34,19 @@ const routes = [
   },
 
   { path: "/store", component: () => import("../pages/StorePage.vue") },
-  { path: "/login", component: () => import("../pages/LoginPage.vue") },
+  {
+    path: "/login",
+    component: () => import("../pages/LoginPage.vue"),
+    meta: { requiresAuth: false },
+    beforeEnter: (to, from, next) => {
+      console.log(store.state.logged);
+      if (store.state.logged) {
+        next({ path: "/" });
+      } else {
+        next();
+      }
+    }
+  },
   { path: "/profile", component: () => import("../pages/ProfilePage.vue") },
   {
     path: "/marker-view/:id",
@@ -44,5 +60,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 });
+
+router.beforeEach(authGuard);
 
 export default router;

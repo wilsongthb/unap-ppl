@@ -3,21 +3,42 @@
 <!-- Created at: 2023-01-12 21:24 -->
 <!-- Description: -->
 <template>
-  <div>
-    <form @submit.prevent="login()" action="">
-      <div class="mb-3">
-        <label for="">Email</label>
-        <input class="form-control" type="text" v-model="username" />
+  <div class="container">
+    <div class="row justify-content-center align-items-center minh-100">
+      <div class="card text-center">
+        <div class="card-header bg-secondary">Login</div>
+        <div class="card-body">
+          <h5 class="card-title">Ingrese sus Accesos</h5>
+          <form @submit.prevent="login()" action="">
+            <div class="mb-3">
+              <!-- <label for="">Email</label> -->
+              <input
+                class="form-control"
+                type="text"
+                v-model="username"
+                placeholder="E-mail" />
+            </div>
+            <div class="mb-3">
+              <!-- <label for="">Password</label> -->
+              <input
+                class="form-control"
+                type="password"
+                v-model="password"
+                placeholder="Contraseña" />
+            </div>
+            <button class="btn btn-info btn-md btn-block" type="submit">
+              Submit
+            </button>
+            <div class="alert mt-3 alert-warning" v-show="message">
+              {{ message }}
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-muted">
+          <a href="#">Forgot Password?</a>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="">Password</label>
-        <input class="form-control" type="password" v-model="password" />
-      </div>
-      <button class="btn btn-primary" type="submit">Submit</button>
-      <div class="alert mt-3 alert-warning" v-show="message">
-        {{ message }}
-      </div>
-    </form>
+    </div>
   </div>
 </template>
 <script>
@@ -57,14 +78,22 @@ export default {
     async login() {
       var result = await AuthService.login(this.username, this.password);
       if (result.success) {
-        //
+        this.registrar();
       } else {
         this.message = result.message;
       }
+    },
+    async registrar() {
+      await this.$store.dispatch("login");
+      this.$router.push("/");
     }
     //
     //
   }
 };
 </script>
-<style scoped></style>
+<style scoped>
+.minh-100 {
+  height: 90vh;
+}
+</style>
