@@ -9,7 +9,33 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         seed_lugares()
         seed_productos()
-        # seed_map_markers()
+        #  seed_map_markers()
+        seed_publicaciones()
+
+
+def seed_publicaciones():
+    with open(os.path.join(settings.BASE_DIR, 'marketplace/data/map-markers.csv'), newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',',quotechar='"')
+        i = 1
+        for row in spamreader:
+            print(row)
+            if i > 1:
+                mapmark = models.MapMark.objects.create(
+                    label=row[0],
+                    title=row[1],
+                    lat=row[2],
+                    lng=row[3],
+                    type=row[4]
+                )
+                if models.Producto.objects.filter(pk=i).exists():
+                    models.Publicacion.objects.create(
+                            creador_id = 1,
+                            producto_id = 1,
+                            map_mark = mapmark, 
+                            precio = 60,
+                            cantidad = 5
+                            )
+            i += 1
 
 
 def seed_map_markers():
