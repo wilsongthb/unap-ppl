@@ -5,15 +5,19 @@
 <template>
   <div>
     <MapEl ref="elMap"></MapEl>
+    <PersonaLista></PersonaLista>
   </div>
 </template>
 <script>
 /* Script part */
 import MapEl from "./MapEl.vue";
+import http from "src/utils/http.js";
+import PersonaLista from "./PersonaLista.vue";
 export default {
   name: "MapPage",
   components: {
-    MapEl
+    MapEl,
+    PersonaLista
   },
 
   // directives
@@ -33,12 +37,30 @@ export default {
 
   // watch: {},
 
-  mounted() {
-    //
+  async mounted() {
+    var res = await http.get("api/marketplace/mapmark/?page_size=9999");
+    res.data.results
+      .map((x) => {
+        x.lat = parseFloat(x.lat);
+        x.lng = parseFloat(x.lng);
+        return x;
+      })
+      .map((x) => {
+        var map = this.$refs.elMap.getMap();
+        new window.google.maps.Marker({
+          position: {
+            lat: x.lat,
+            lng: x.lng
+          },
+          map,
+          title: x.label,
+          clickable: true,
+          icon: x.iconSrc
+        });
+      });
   },
 
   methods: {
-    //
     //
     //
   }

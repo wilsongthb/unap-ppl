@@ -42,7 +42,9 @@ export default {
   },
 
   methods: {
-    //
+    getMap() {
+      return this.$options.map;
+    }
     //
     //
   }

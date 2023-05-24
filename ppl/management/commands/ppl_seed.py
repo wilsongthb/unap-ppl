@@ -55,8 +55,8 @@ def seed_excel_plantas():
 
         map_mark = mk_models.MapMark.objects.create(
                 label=persona.razon_social,
-                lat=float(lat_temp),
-                lng=float(lng_temp),
+                lat=float(lat_temp)*-1,
+                lng=float(lng_temp)*-1,
                 type='PL',
                 )
         planta = models.Planta.objects.create(

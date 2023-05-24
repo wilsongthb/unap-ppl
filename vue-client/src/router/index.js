@@ -1,14 +1,15 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 // import HomeView from "../views/HomeView.vue";
 import PublicContainer from "src/pages/PublicContainer.vue";
-import PublicIndex from "src/pages/PublicIndex.vue";
+// import PublicIndex from "src/pages/PublicIndex.vue";
 
 const routes = [
   {
     path: "/",
     component: PublicContainer,
     children: [
-      { path: "", component: PublicIndex },
+      // { path: "", component: PublicIndex },
+      { path: "", redirect: "/marketplace" },
       {
         path: "about",
         name: "about",

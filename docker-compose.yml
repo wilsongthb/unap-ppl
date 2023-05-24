@@ -1,9 +1,17 @@
 services:
-  www:
+  api:
     build: .
     ports: 
       - "3000:3000"
     volumes:
       - ./:/code
-    command: python /code/manage.py runserver 0.0.0.0:3000
+    command: "python /code/manage.py runserver 0.0.0.0:3000"
     working_dir: /code
+  web:
+    build: vue-client
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./vue-client/:/code/
+    working_dir: /code/
+    command: sh -c "npx vue-cli-service serve --host=0.0.0.0 --port=8080"
